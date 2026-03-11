@@ -8,7 +8,7 @@
 - **APK analysé :** `UnCrackable-Level1.apk` (OWASP MSTG)
 - **Hash SHA-256 :** `1DA8BF57D266109F9A07C01BF7111A1975CE01F190B9D914BCD3AE3DBEF96F21`
 - **Outils utilisés :** PowerShell, JADX GUI, dex2jar, JD-GUI
-- **Environnement :** Windows 11 — `D:\APK-Analysis`
+
 
 ---
 
