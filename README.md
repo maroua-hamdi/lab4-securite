@@ -14,39 +14,36 @@
 
 ## Task 1 — Préparer le workspace et vérifier l'APK
 
-![Task 1 - Instructions](1773265104214_image.png)
-
 **Création du dossier et vérification des magic bytes :**
 
 On vérifie que l'APK commence bien par `50 4B` (`PK`) — signature d'une archive ZIP valide. Tout APK Android est en réalité un fichier ZIP, donc ces octets doivent toujours être présents.
 
-![Task 1 - Magic bytes](1773265279359_image.png)
+<img width="1225" height="662" alt="image" src="https://github.com/user-attachments/assets/0db9cc6d-f755-40aa-81c9-b379db730811" />
+
 
 **Listing du contenu de l'APK :**
 
 Sans l'extraire, on liste les fichiers internes. On retrouve les composants attendus : `AndroidManifest.xml`, `classes.dex` (le code compilé), les certificats de signature dans `META-INF/`, et les ressources graphiques.
 
-![Task 1 - Contenu ZIP](1773265295354_image.png)
+<img width="1201" height="343" alt="image" src="https://github.com/user-attachments/assets/7742ea7a-bb85-48d0-a71f-a3dc048798a5" />
+
 
 **Calcul du hash SHA-256 :**
 
 Le hash sert à identifier de façon unique le fichier analysé et garantir qu'il n'a pas été modifié. Il sera mentionné dans le rapport final pour la traçabilité.
 
-![Task 1 - Hash SHA-256](1773265311536_image.png)
+<img width="1187" height="179" alt="image" src="https://github.com/user-attachments/assets/ba4a6591-7fc6-4f58-ad06-7b7f00128cfe" />
+
 
 ---
 
 ## Task 2 — Extraire/obtenir l'APK
-
-![Task 2 - Instructions](1773265117769_image.png)
 
 L'APK `UnCrackable-Level1.apk` a été utilisé directement (Option A — APK fourni). Placé dans `D:\APK-Analysis` sans manipulation supplémentaire.
 
 ---
 
 ## Task 3 — Analyse avec JADX GUI
-
-![Task 3 - Instructions](1773265132241_image.png)
 
 **Exploration dans JADX GUI :**
 
@@ -60,39 +57,35 @@ Dans la classe `a`, on trouve deux éléments critiques codés en dur :
 
 Ces valeurs hardcodées permettent de reconstituer le secret sans exécuter l'application.
 
-![Task 3 - JADX GUI, classe a](1773265346111_image.png)
+<img width="1217" height="491" alt="image" src="https://github.com/user-attachments/assets/f91c3060-2010-4341-911a-cf4e2c41c576" />
+
 
 ---
 
 ## Task 4 — Recherche de chaînes sensibles
 
-![Task 4 - Instructions](1773265148258_image.png)
-
 **Méthode `verify` dans `MainActivity` :**
 
 Quand l'utilisateur appuie sur le bouton, cette méthode récupère la saisie et appelle `a.a(string)`. Si le retour est `true`, l'app affiche "Success!". Toute la logique est côté client — il suffit de comprendre ce que `a.a()` calcule pour trouver le secret.
 
-![Task 4 - Méthode verify](1773265366615_image.png)
+<img width="1223" height="374" alt="image" src="https://github.com/user-attachments/assets/f874ae55-965b-498d-ab7b-e2b4d98224d2" />
+
 
 **Méthode `b` — conversion hex vers bytes :**
 
 Transforme la chaîne hexadécimale `8d127684cbc37c17616d806cf50473cc` en 16 octets, qui constituent la clé AES-128 utilisée pour le déchiffrement.
 
-![Task 4 - Méthode b hex](1773265457497_image.png)
+<img width="1220" height="195" alt="image" src="https://github.com/user-attachments/assets/ee69da8f-38bc-426d-a154-8cf7907f971f" />
 
 ---
 
 ## Task 5 — Convertir DEX vers JAR avec dex2jar
-
-![Task 5 - Instructions](1773265162768_image.png)
 
 On extrait `classes.dex` de l'APK puis on le convertit en `app.jar` avec dex2jar. Nécessaire pour ouvrir le code dans JD-GUI, qui ne lit que le format JAR/CLASS (Java) et pas le format DEX (Android).
 
 ---
 
 ## Task 6 — Comparaison JADX vs JD-GUI
-
-![Task 6 - Instructions](1773265177211_image.png)
 
 On ouvre `app.jar` dans JD-GUI et on compare avec JADX sur la même classe. Différences notables :
 - JADX donne accès aux ressources et au manifest, JD-GUI non
@@ -104,8 +97,6 @@ Conclusion : JADX est plus complet pour l'analyse Android. JD-GUI reste utile en
 ---
 
 ## Task 7 — Rédiger le mini-rapport
-
-![Task 7 - Instructions](1773265204372_image.png)
 
 Vulnérabilités identifiées :
 
@@ -119,8 +110,6 @@ Vulnérabilités identifiées :
 ---
 
 ## Task 8 — Nettoyage
-
-![Task 8 - Instructions](1773265217360_image.png)
 
 - Rapport vérifié (aucune info sensible réelle incluse)
 - Fichiers organisés dans `results/`
@@ -138,7 +127,8 @@ Grâce à l'analyse statique, on reconstruit la chaîne complète :
 
 **Validation dans l'émulateur :**
 
-![Résultat final](1773265255483_image.png)
+<img width="632" height="519" alt="image" src="https://github.com/user-attachments/assets/20f8cba0-a1a2-408f-8174-6df7800338b0" />
+
 
 > **Secret : `I want to believe`**
 >
